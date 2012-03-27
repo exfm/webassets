@@ -78,6 +78,52 @@ More about the management commands which are available (in generic,
 non-Django specific form) can be found on the :doc:`../script` page.
 
 
+Staticfiles support
+~~~~~~~~~~~~~~~~~~~
+
+When using ``django.contrib.staticfiles``, your CSS/Javascript source files
+are spread across multiple directories.
+
+``django-assets`` tries to "just work" here. When ``DEBUG=True``, and
+``django.contrib.staticfiles`` is in ``INSTALLED_APPS``, it will
+automatically use the staticfiles finder system to look for source files.
+
+Thus, you can reference your media files in a bundle just as you would
+otherwise. Output files are written to ``STATIC_ROOT``, which is however
+not served by Django during development. If you are having bundles
+built while in development mode, you will need to add
+``django_assets.finders.AssetsFinder`` to your ``STATICFILES_FINDERS``
+setting to have Django serve them.
+
+In production mode, ``django-assets`` will expect all source files
+to be located within ``STATIC_ROOT``. It will not use the ``staticfiles``
+finder system to locate source files. You are expected to call the
+``./manage.py collectstatic`` command before running
+``./manage.py assets rebuild``. If you are using automatic rebuilding,
+changes will currently not be picked up in production until you have run
+``collectstatic``.
+
+
+``CachedStaticFileStorage``
++++++++++++++++++++++++++++
+
+The new ``CachedStaticFileStorage`` in Django 1.4 is able to rename all files
+to include their content hash in the filename, and rewrite references within
+your code. This is somewhat overlapping with our own
+:doc:`versioning system </expiry>`.
+
+If you prefer to use ``CachedStaticFileStorage``, you shouldn't run into any
+problems. Just make sure you run ``./manage.py assets build`` first, and
+``./manage.py collectstatic`` second.
+
+This only doesn't *just work* if you are defining bundles in your templates.
+If that is the case, you currently need to define a ``ASSETS_ROOT`` setting
+that points to a different directory then ``STATIC_ROOT``. Only then will
+``collectstatic`` be able to find the output files created with
+``./manage.py build --parse-templates``, and process them into
+``STATIC_ROOT``, like any other static file.
+
+
 Jinja2 support
 ~~~~~~~~~~~~~~
 

@@ -14,12 +14,6 @@ You can also write :doc:`custom filters <custom_filters>`.
 Javascript compressors
 ----------------------
 
-``jsmin``
-~~~~~~~~~
-
-.. autoclass:: webassets.filter.jsmin.JSMinFilter
-
-
 ``rjsmin``
 ~~~~~~~~~~
 
@@ -33,16 +27,28 @@ Javascript compressors
 .. autoclass:: webassets.filter.yui.YUIJSFilter
 
 
+``closure_js``
+~~~~~~~~~~~~~~
+
+.. automodule:: webassets.filter.closure
+
+
+``uglifyjs``
+~~~~~~~~~~~~
+
+.. autoclass:: webassets.filter.uglifyjs.UglifyJSFilter
+
+
+``jsmin``
+~~~~~~~~~
+
+.. autoclass:: webassets.filter.jsmin.JSMinFilter
+
+
 ``jspacker``
 ~~~~~~~~~~~~
 
 .. autoclass:: webassets.filter.jspacker.JSPackerFilter
-
-
-``closure``
-~~~~~~~~~~~
-
-.. automodule:: webassets.filter.closure
 
 
 ``uglifyjs``
@@ -91,6 +97,12 @@ CSS Compilers
 .. autoclass:: webassets.filter.less.LessFilter
 
 
+``less_ruby``
+~~~~~~~~~~~~~
+
+.. autoclass:: webassets.filter.less_ruby.LessFilter
+
+
 .. _filters-sass:
 
 ``sass``
@@ -111,6 +123,12 @@ CSS Compilers
 .. autoclass:: webassets.filter.compass.CompassFilter
 
 
+``pyscss``
+~~~~~~~~~~
+
+.. autoclass:: webassets.filter.pyscss.PyScssFilter
+
+
 Other
 -----
 
@@ -122,10 +140,22 @@ Other
 .. autoclass:: webassets.filter.cssrewrite.CSSRewriteFilter
 
 
+``datauri``
+~~~~~~~~~~~~~~
+
+.. autoclass:: webassets.filter.datauri.CSSDataUriFilter
+
+
 ``jst``
 ~~~~~~~~~~~~~~
 
 .. autoclass:: webassets.filter.jst.JSTFilter
+
+
+``handlebars``
+~~~~~~~~~~~~~~
+
+.. automodule:: webassets.filter.handlebars
 
 
 ``cssprefixer``

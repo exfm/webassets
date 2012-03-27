@@ -32,7 +32,7 @@ import tempfile
 import shutil
 
 from webassets.exceptions import FilterError
-from webassets.filter import Filter
+from webassets.filter import Filter, option
 
 
 __all__ = ('CompassFilter',)
@@ -44,30 +44,32 @@ class CompassFilter(Filter):
 
     Requires at least version 0.10.
 
-    To compile a standard compass project, you only need to have
-    django-assets compile your main ``screen.sass``, ``print.sass``
-    and ``ie.sass`` files. All the partials that you include will
-    be handled by compass.
+    To compile a standard Compass project, you only need to have
+    to compile your main ``screen.sass``, ``print.sass`` and ``ie.sass``
+    files. All the partials that you include will be handled by Compass.
 
     If you want to combine the filter with other CSS filters, make
     sure this one runs first.
 
-    **Note**: Currently, this needs to be the very first filter
-    applied. Changes by filters that ran before will be lost.
+    Supported configuration options:
+
+    COMPASS_BIN
+        The path to the Compass binary. If not set, the filter will
+        try to run ``compass`` as if it's in the system path.
+
+    COMPASS_PLUGINS
+        Compass plugins to use. This is equivalent to the ``--require``
+        command line option of the Compass. and expects a Python list
+        object of Ruby libraries to load.
     """
 
-    # XXX: See the less filter as to how we might deal with the "needs
-    # to be first" issue.
-
     name = 'compass'
+    options = {
+        'compass': ('binary', 'COMPASS_BIN'),
+        'plugins': option('COMPASS_PLUGINS', type=list)
+    }
 
-    def setup(self):
-        self.compass = self.get_config('COMPASS_BIN', what='compass binary',
-                                       require=False) or 'compass'
-        self.plugins = self.get_config('COMPASS_PLUGINS', what='compass plugins',
-                                       require=False) or []
-
-    def input(self, _in, out, source_path, output_path):
+    def open(self, out, source_path, **kw):
         """Compass currently doesn't take data from stdin, and doesn't allow
         us accessing the result from stdout either.
 
@@ -146,8 +148,8 @@ http_javascripts_dir = ""
             finally:
                 f.close()
 
-            command = [self.compass, 'compile']
-            for plugin in self.plugins:
+            command = [self.compass or 'compass', 'compile']
+            for plugin in self.plugins or []:
                 command.extend(('--require', plugin))
             command.extend(['--sass-dir', sassdir,
                             '--css-dir', tempout,
